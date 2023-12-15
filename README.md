@@ -46,3 +46,5 @@ I tested it out using [this notebook](02_vad_testing.ipynb).
 Again I went with pyannote. Again it would not work without signing up for some more models, but the error messages lead me through it.
 
 This part, investigated in [this notebook](02_diarization_testing.ipynb) was pretty slow. For 50 minutes of audio I needed 35 minutes of CPU time. It can be run on GPU, but I did not manage to due to some obscure nvidia errors that would require Damjan install new drivers. Perhaps with a careful downgrade of torch and pyannote this could be overcome.
+
+2023-12-15T09:23:52: While working on Južne vesti I found a configuration that works. I'll add it to this repo.
