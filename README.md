@@ -8,7 +8,9 @@ ASR_pipeline/
 - data
     - audio_input <- place your audio files here
     - audio_16khz_mono_wav
-
+    - asr
+    - vad
+    - diarization
 ## On downloading mixcloud files
 
 Since there is no option to download audio directly from mixcloud, I used [this website](https://mixes.cloud/soundcloud-downloader/). Insert the mixcloud url in the form and click the `Download from Mixcloud` button. After some processing, a red button labelled `Download mix` pops up. You can copy its url, and then use wget to download it anywhere:
@@ -48,3 +50,9 @@ Again I went with pyannote. Again it would not work without signing up for some 
 This part, investigated in [this notebook](02_diarization_testing.ipynb) was pretty slow. For 50 minutes of audio I needed 35 minutes of CPU time. It can be run on GPU, but I did not manage to due to some obscure nvidia errors that would require Damjan install new drivers. Perhaps with a careful downgrade of torch and pyannote this could be overcome.
 
 2023-12-15T09:23:52: While working on Južne vesti I found a configuration that works. I'll add it to this repo.
+
+2023-12-15T09:38:01: Wooo diarization with GPU only takes 46 seconds!
+
+## ASR before segmenting
+
+To investigate the potential usability of non-vad segmentation, I pass the whole file through the pipeline.

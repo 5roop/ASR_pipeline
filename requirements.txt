@@ -1,9 +1,15 @@
 accelerate==0.25.0
 datasets==2.15.0
+librosa==0.10.1
 lxml==4.9.3
 numpy==1.26.2
 openpyxl==3.1.2
 pandas==2.1.4
+pyannote.audio==3.1.1
+pyannote.core==5.0.0
+pyannote.database==5.0.1
+pyannote.metrics==3.2.1
+pyannote.pipeline==3.0.1
 pydub==0.25.1
 pytorch-lightning==2.1.2
 pytorch-metric-learning==2.3.0
