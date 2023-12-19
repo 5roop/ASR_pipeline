@@ -49,8 +49,26 @@ diarization_df = read_rttm(diarization_path)
 vad_df = read_rttm(vad_path)
 asr_df = read_json(asr_path)
 
-def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str)-> ET.Element:
-    first_speaker_id = exb.find(".//speaker").get("id")
+def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str, diarization:bool=False)-> ET.Element:
+    # Add speaker for the purpose:
+    if diarization:
+        for speaker_name in df.speaker_name.unique():
+            speaker = ET.Element("speaker", attrib={"id": speaker_name})
+            abbreviation = ET.Element("abbreviation")
+            abbreviation.text = speaker_name
+            speaker.append(
+                abbreviation
+            )
+            exb.find(".//speakertable").append(speaker)
+    else:
+        speaker = ET.Element("speaker", attrib={"id": tier_name})
+        abbreviation = ET.Element("abbreviation")
+        abbreviation.text = tier_name
+        speaker.append(
+            abbreviation
+        )
+        exb.find(".//speakertable").append(speaker)
+
     # Add <tli>:
     timeline = exb.find(".//common-timeline")
     N = len(timeline.findall(".//tli"))
@@ -62,29 +80,47 @@ def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str)-> ET.E
     timeline[:] = sorted(timeline, key=lambda child: float(child.get("time")))
     # Prepare inverse mapper (seconds -> id):
     mapper = {tli.get("time"): tli.get("id") for tli in timeline.findall("tli")}
-    # Add new tier:
-    tier = ET.Element("tier", attrib=dict(
-        id=tier_name,
-        category="v",
-        type="t",
-        display_name=tier_name,
-        speaker=first_speaker_id
-    ))
-    for i, row in df.iterrows():
-        event = ET.Element("event", attrib=dict(
-            start= mapper.get(str(row["start"])),
-            end=mapper.get(str(row["end"]))
+    # Add new tier(s):
+    if diarization:
+        for speaker_name in df.speaker_name.unique():
+            tier = ET.Element("tier", attrib=dict(
+                id=speaker_name,
+                category="v",
+                type="t",
+                display_name=speaker_name,
+                speaker=speaker_name
+            ))
+            for i, row in df[df.speaker_name == speaker_name].iterrows():
+                event = ET.Element("event", attrib=dict(
+                    start= mapper.get(str(row["start"])),
+                    end=mapper.get(str(row["end"]))
+                ))
+                event.text = "-"
+                tier.append(event)
+            exb.find("basic-body").append(tier)
+    else:
+        tier = ET.Element("tier", attrib=dict(
+            id=tier_name,
+            category="v",
+            type="t",
+            display_name=tier_name,
+            speaker=tier_name
         ))
-        try:
-            event.text = row["speaker_name"]
-        except:
-            event.text = row["text"]
-        tier.append(event)
-    exb.find("basic-body").append(tier)
+        for i, row in df.iterrows():
+            event = ET.Element("event", attrib=dict(
+                start= mapper.get(str(row["start"])),
+                end=mapper.get(str(row["end"]))
+            ))
+            try:
+                event.text = row["speaker_name"]
+            except:
+                event.text = row["text"]
+            tier.append(event)
+        exb.find("basic-body").append(tier)
     return exb
 
 exb = add_df_to_template(exb, vad_df, tier_name="vad")
-exb = add_df_to_template(exb, diarization_df, tier_name="diarization")
+exb = add_df_to_template(exb, diarization_df, tier_name="diarization", diarization=True)
 exb = add_df_to_template(exb, asr_df, tier_name="asr")
 exb.find(".//referenced-file").set("url", audio_path.name)
 ET.indent(exb, space="\t")
