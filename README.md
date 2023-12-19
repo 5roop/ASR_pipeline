@@ -56,3 +56,16 @@ This part, investigated in [this notebook](02_diarization_testing.ipynb) was pre
 ## ASR before segmenting
 
 To investigate the potential usability of non-vad segmentation, I pass the whole file through the pipeline.
+
+In addition, nvidia Nemo models are now being tested, soon to be included beside whisper, إِنْ شَاءَ ٱللَّٰهُ
+
+
+# Further steps:
+
+We shall take diarization output as the basis for further segmentation. Segments with < 0.1s duration shall not be transcribed, but they should stay in there to be obvious that something is happening there. A new framework to handle it will have to be devised.
+
+
+
+### Bookkeeping:
+
+Export environment to yaml file: `mamba env export > environment.yaml`
