@@ -40,7 +40,6 @@ dependencies:
   - certifi=2023.11.17=pyhd8ed1ab_0
   - cffi=1.16.0=py311hb3a22ac_0
   - charset-normalizer=3.2.0=pyhd8ed1ab_0
-  - click=8.1.6=unix_pyh707e725_0
   - colorama=0.4.6=pyhd8ed1ab_0
   - comm=0.1.4=pyhd8ed1ab_0
   - conda=23.3.1=py311h38be061_0
@@ -189,7 +188,6 @@ dependencies:
   - nest-asyncio=1.5.6=pyhd8ed1ab_0
   - nettle=3.9.1=h7ab15ed_0
   - networkx=3.1=pyhd8ed1ab_0
-  - numpy=1.26.2=py311h64a7726_0
   - openh264=2.3.1=hcb278e6_2
   - openjpeg=2.5.0=hfec8fc6_2
   - openssl=3.2.0=hd590300_1
@@ -243,7 +241,6 @@ dependencies:
   - safetensors=0.3.3=py311h46250e7_1
   - scikit-learn=1.3.2=py311hc009520_2
   - scipy=1.11.4=py311h64a7726_0
-  - setuptools=68.0.0=pyhd8ed1ab_0
   - six=1.16.0=pyh6c4a22f_0
   - sleef=3.5.1=h9b69904_2
   - snappy=1.1.10=h9fff704_0
@@ -263,7 +260,6 @@ dependencies:
   - truststore=0.8.0=pyhd8ed1ab_0
   - tzdata=2023c=h71feb2d_0
   - ucx=1.14.1=h4a2ce2d_3
-  - wcwidth=0.2.6=pyhd8ed1ab_0
   - wheel=0.40.0=pyhd8ed1ab_0
   - x264=1!164.3095=h166bdaf_2
   - x265=3.5=h924138e_3
@@ -291,56 +287,113 @@ dependencies:
   - zstandard=0.22.0=py311haa97af0_0
   - zstd=1.5.5=hfc55251_0
   - pip:
+      - absl-py==2.0.0
       - accelerate==0.25.0
+      - alabaster==0.7.13
       - alembic==1.13.0
+      - aniso8601==9.0.1
       - annotated-types==0.6.0
       - antlr4-python3-runtime==4.9.3
       - anyio==3.7.1
       - appdirs==1.4.4
+      - asciitree==0.3.3
       - asteroid-filterbanks==0.4.0
+      - attrdict==2.0.1
       - audioread==3.0.1
+      - babel==2.14.0
+      - beautifulsoup4==4.12.2
+      - black==19.10b0
+      - boto3==1.34.3
+      - botocore==1.34.3
+      - braceexpand==0.1.7
+      - cachetools==5.3.2
+      - cdifflib==1.2.6
+      - click==8.0.2
       - cmake==3.28.0
       - colorlog==6.8.0
       - configargparse==1.7
       - connection-pool==0.0.3
       - contourpy==1.2.0
       - cycler==0.12.1
+      - cython==3.0.6
       - datasets==2.15.0
       - datrie==0.8.2
+      - distance==0.1.3
+      - docker-pycreds==0.4.0
       - docopt==0.6.2
       - docutils==0.20.1
       - dpath==2.1.6
+      - editdistance==0.6.2
       - einops==0.7.0
       - et-xmlfile==1.1.0
+      - faiss-cpu==1.7.4
       - fastapi==0.105.0
+      - fasteners==0.19
       - fastjsonschema==2.19.0
+      - fasttext==0.9.2
+      - flask==2.2.5
+      - flask-restful==0.3.10
       - fonttools==4.46.0
+      - ftfy==6.1.3
+      - g2p-en==2.1.0
+      - gdown==4.7.1
       - gitdb==4.0.11
       - gitpython==3.1.40
+      - google-auth==2.25.2
+      - google-auth-oauthlib==1.2.0
       - greenlet==3.0.2
+      - grpcio==1.60.0
       - h11==0.14.0
+      - h5py==3.10.0
       - huggingface-hub==0.19.4
       - humanfriendly==10.0
+      - hydra-core==1.3.2
       - hyperpyyaml==1.2.2
+      - ijson==3.2.3
+      - imagesize==1.4.1
+      - inflect==7.0.0
+      - iniconfig==2.0.0
+      - ipywidgets==8.1.1
+      - isort==5.13.2
+      - itsdangerous==2.1.2
+      - jieba==0.42.1
+      - jiwer==2.5.2
+      - jmespath==1.0.1
       - jsonschema==4.20.0
       - jsonschema-specifications==2023.11.2
       - julius==0.2.7
+      - jupyterlab-widgets==3.0.9
+      - kaldi-python-io==1.2.2
+      - kaldiio==2.18.0
       - kiwisolver==1.4.5
+      - kornia==0.7.0
+      - latexcodec==2.0.1
       - lazy-loader==0.3
+      - levenshtein==0.22.0
       - librosa==0.10.1
       - lightning==2.1.2
       - lightning-utilities==0.10.0
       - line-profiler==4.1.2
       - lit==17.0.6
       - llvmlite==0.41.1
+      - loguru==0.7.2
       - lxml==4.9.3
       - mako==1.3.0
+      - markdown==3.5.1
       - markdown-it-py==3.0.0
+      - markdown2==2.4.12
+      - marshmallow==3.20.1
       - matplotlib==3.8.2
       - mdurl==0.1.2
+      - megatron-core==0.3.0
       - msgpack==1.0.7
       - nbformat==5.9.2
+      - nemo-text-processing==0.1.8rc0
+      - nemo-toolkit==1.21.0
+      - nltk==3.8.1
       - numba==0.58.1
+      - numcodecs==0.12.1
+      - numpy==1.23.5
       - nvidia-cublas-cu11==11.10.3.66
       - nvidia-cublas-cu12==12.1.3.1
       - nvidia-cuda-cupti-cu11==11.7.101
@@ -364,14 +417,22 @@ dependencies:
       - nvidia-nvjitlink-cu12==12.3.101
       - nvidia-nvtx-cu11==11.7.91
       - nvidia-nvtx-cu12==12.1.105
+      - oauthlib==3.2.2
       - omegaconf==2.3.0
+      - onnx==1.15.0
+      - opencc==1.1.6
       - openpyxl==3.1.2
       - optuna==3.5.0
       - pandas==2.1.4
+      - pangu==4.0.6.1
+      - parameterized==0.9.0
+      - pathspec==0.12.1
       - pillow==10.1.0
       - plac==1.4.2
+      - portalocker==2.8.2
       - primepy==1.3
-      - protobuf==4.25.1
+      - progress==1.6
+      - protobuf==4.23.4
       - pulp==2.7.0
       - pyannote-audio==3.1.1
       - pyannote-core==5.0.0
@@ -379,47 +440,98 @@ dependencies:
       - pyannote-metrics==3.2.1
       - pyannote-pipeline==3.0.1
       - pyarrow-hotfix==0.6
-      - pydantic==2.5.2
+      - pyasn1==0.5.1
+      - pyasn1-modules==0.3.0
+      - pybind11==2.11.1
+      - pybtex==0.24.0
+      - pybtex-docutils==1.0.3
+      - pydantic==1.10.13
       - pydantic-core==2.14.5
       - pydub==0.25.1
+      - pynini==2.1.5
       - pyparsing==3.1.1
-      - pytorch-lightning==2.1.2
+      - pypinyin==0.50.0
+      - pypinyin-dict==0.7.0
+      - pytest==7.4.3
+      - pytest-runner==6.0.1
+      - python-json-logger==2.0.7
+      - pytorch-lightning==2.0.7
       - pytorch-metric-learning==2.3.0
+      - rapidfuzz==2.13.7
       - referencing==0.32.0
+      - requests-oauthlib==1.3.1
       - reretry==0.11.8
       - rich==13.7.0
+      - rouge-score==0.1.2
       - rpds-py==0.13.2
+      - rsa==4.9
+      - s3transfer==0.9.0
+      - sacrebleu==2.4.0
       - semver==3.0.2
+      - sentence-transformers==2.2.2
       - sentencepiece==0.1.99
+      - sentry-sdk==1.39.1
+      - setproctitle==1.3.3
+      - setuptools==65.5.1
       - shellingham==1.5.4
       - smart-open==6.4.0
       - smmap==5.0.1
       - snakemake==7.32.4
       - sniffio==1.3.0
+      - snowballstemmer==2.2.0
       - sortedcontainers==2.4.0
       - soundfile==0.12.1
+      - soupsieve==2.5
+      - sox==1.4.1
       - soxr==0.3.7
       - speechbrain==0.5.16
+      - sphinx==7.2.6
+      - sphinxcontrib-applehelp==1.0.7
+      - sphinxcontrib-bibtex==2.6.1
+      - sphinxcontrib-devhelp==1.0.5
+      - sphinxcontrib-htmlhelp==2.0.4
+      - sphinxcontrib-jsmath==1.0.1
+      - sphinxcontrib-qthelp==1.0.6
+      - sphinxcontrib-serializinghtml==1.1.9
+      - sphynx==0.0.3
       - sqlalchemy==2.0.23
       - starlette==0.27.0
       - stopit==1.1.2
+      - structlog==21.5.0
       - tabulate==0.9.0
+      - tensorboard==2.15.1
+      - tensorboard-data-server==0.7.2
       - tensorboardx==2.6.2.2
+      - tensorstore==0.1.45
+      - termcolor==2.4.0
+      - text-unidecode==1.3
+      - textdistance==4.6.0
+      - texterrors==0.4.4
       - throttler==1.2.2
-      - tokenizers==0.15.0
+      - tokenizers==0.13.3
+      - toml==0.10.2
       - toposort==1.10
       - torch==2.1.1
       - torch-audiomentations==0.11.0
       - torch-pitch-shift==1.2.4
       - torchaudio==2.1.1
       - torchmetrics==1.2.1
-      - transformers==4.36.1
+      - transformers==4.33.3
       - transliterate==1.10.2
       - triton==2.1.0
+      - typed-ast==1.5.5
       - typer==0.9.0
       - typing-extensions==4.9.0
-      - urllib3==2.1.0
+      - urllib3==2.0.7
       - uvicorn==0.24.0.post1
+      - wandb==0.16.1
+      - wcwidth==0.2.12
+      - webdataset==0.1.62
+      - werkzeug==3.0.1
+      - wget==3.2
+      - widgetsnbextension==4.0.9
       - wrapt==1.16.0
+      - youtokentome==1.0.6
       - yte==1.5.4
+      - zarr==2.16.1
 prefix: /home/peterr/mambaforge
