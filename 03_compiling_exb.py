@@ -14,7 +14,16 @@ out_path = "test.exb"
 exb = ET.fromstring(template_path.read_bytes())
 
 
-def read_rttm(path):
+def read_rttm(path: Path) -> pd.DataFrame:
+    """Reads RTTM format (output of VAD/diarization).
+
+    Args:
+        path (Path): Path to read. Should be RTTM formatted.
+
+    Returns:
+        pd.DataFrame: dataframe with columns ["start", "end", "speaker_name"]. Start and end cols
+        are floats. End is calculated from start and duration.
+    """    
     df = pd.read_csv(
         path,
         sep=" ",
@@ -37,7 +46,15 @@ def read_rttm(path):
     df["end"] = df.start + df.duration
     return df[["start", "end", "speaker_name"]]
 
-def read_json(path):
+def read_json(path: Path) -> pd.DataFrame:
+    """Reads json file, which it expects to be a dump of ASR pipeline.
+
+    Args:
+        path (Path): json location.
+
+    Returns:
+        pd.DataFrame: dataframe with columns ["start", "end", "text"].
+    """    
     import json
     d = json.loads(path.read_text())
     df = pd.DataFrame(d.get("chunks"))
@@ -49,7 +66,18 @@ diarization_df = read_rttm(diarization_path)
 vad_df = read_rttm(vad_path)
 asr_df = read_json(asr_path)
 
-def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str, diarization:bool=False)-> ET.Element:
+def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str = "", diarization:bool=False)-> ET.Element:
+    """Adds data from a pandas dataframe with columns ["start", "end", "speaker_name"] or ["start", "end", "text"]. Adds one or more tiers. Adds appropriate <tli> and speakers.
+
+    Args:
+        exb (ET.Element): parsed EXB template (as in the root of this repo.)
+        df (pd.DataFrame): dataframe with data to be added.
+        tier_name (str, optional): what the added tier should be called. This argument is moot for cases where diarization=True, but should be passed otherwise.
+        diarization (bool, optional): If the input data is diarization, this should be set to True. This means that for every speaker in the column 'speaker_name', a new tier will be constructed with placeholder text ('-'). Defaults to False.
+
+    Returns:
+        ET.Element: lxml.etree.Element with all of the added data.
+    """    
     # Add speaker for the purpose:
     if diarization:
         for speaker_name in df.speaker_name.unique():
@@ -61,6 +89,8 @@ def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str, diariz
             )
             exb.find(".//speakertable").append(speaker)
     else:
+        if tier_name == "":
+            raise AttributeError("Please pass a name for this tier.")
         speaker = ET.Element("speaker", attrib={"id": tier_name})
         abbreviation = ET.Element("abbreviation")
         abbreviation.text = tier_name
@@ -120,7 +150,7 @@ def add_df_to_template(exb: ET.Element, df: pd.DataFrame, tier_name: str, diariz
     return exb
 
 exb = add_df_to_template(exb, vad_df, tier_name="vad")
-exb = add_df_to_template(exb, diarization_df, tier_name="diarization", diarization=True)
+exb = add_df_to_template(exb, diarization_df,  diarization=True)
 exb = add_df_to_template(exb, asr_df, tier_name="asr")
 exb.find(".//referenced-file").set("url", audio_path.name)
 ET.indent(exb, space="\t")
