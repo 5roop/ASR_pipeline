@@ -508,7 +508,7 @@ dependencies:
       - textdistance==4.6.0
       - texterrors==0.4.4
       - throttler==1.2.2
-      - tokenizers==0.13.3
+      - tokenizers==0.15.0
       - toml==0.10.2
       - toposort==1.10
       - torch==2.1.1
@@ -516,7 +516,7 @@ dependencies:
       - torch-pitch-shift==1.2.4
       - torchaudio==2.1.1
       - torchmetrics==1.2.1
-      - transformers==4.33.3
+      - transformers==4.36.2
       - transliterate==1.10.2
       - triton==2.1.0
       - typed-ast==1.5.5

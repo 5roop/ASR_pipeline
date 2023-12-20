@@ -17,6 +17,7 @@ pydub==0.25.1
 pytorch-lightning==2.1.2
 pytorch-metric-learning==2.3.0
 scipy==1.11.4
+sentence-transformers==2.2.2
 snakemake==7.32.4
 torch-audiomentations==0.11.0
 torch-pitch-shift==1.2.4
@@ -24,4 +25,4 @@ torch==2.1.1
 torchaudio==2.1.1
 torchmetrics==1.2.1
 torchvision==0.15.2
-transformers==4.36.1
+transformers==4.36.2
