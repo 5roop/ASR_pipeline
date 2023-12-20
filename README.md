@@ -65,6 +65,10 @@ In addition, nvidia Nemo models are now being tested, soon to be included beside
 We shall take diarization output as the basis for further segmentation. Segments with < 0.1s duration shall not be transcribed, but they should stay in there to be obvious that something is happening there. A new framework to handle it will have to be devised.
 
 
+# Status report as of 2023-12-20T11:56:02
+
+NeMo transcriber was implemented. For some reason transformers update was necessary, but it worked. The implementation could be better, right now transcriptions from two models are produced together and written in a single file. Perhaps this will be fixed in future iterations so that parallelization or snakemakization will be easier.
+
 
 ### Bookkeeping:
 
