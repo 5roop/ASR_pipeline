@@ -1,6 +1,10 @@
-from lxml import etree as ET
+# This script accepts RTTM and json datasources and compiles them all in EXB for manual checking
+# and decision making. RTTMs could be from VAD, diarization, or resegmentation. JSON should be from 
+# ASR-ing the entire audio.
 from pathlib import Path
 import pandas as pd
+from lxml import etree as ET
+from utils import read_json, read_rttm
 
 idx = 0
 
@@ -12,7 +16,6 @@ template_path = Path("exb_template.xml")
 out_path = "test.exb"
 
 exb = ET.fromstring(template_path.read_bytes())
-from utils import read_json, read_rttm  
 diarization_df = read_rttm(diarization_path)
 vad_df = read_rttm(vad_path)
 asr_df = read_json(asr_path)
