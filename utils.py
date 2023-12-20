@@ -47,9 +47,70 @@ def read_json(path: Path) -> pd.DataFrame:
         pd.DataFrame: dataframe with columns ["start", "end", "text"].
     """    
     import json
+
     d = json.loads(path.read_text())
     df = pd.DataFrame(d.get("chunks"))
     df["start"] = df.timestamp.apply(lambda l: float(l[0])).round(decimals=3)
     df["end"] = df.timestamp.apply(lambda l: float(l[1])).round(decimals=3)
     return df[["start", "end", "text"]]
-  
+
+
+def process_whisper(files_to_process: list[str | Path]) -> list[str]:
+    from datasets import Dataset, Audio
+    from transformers.pipelines.pt_utils import KeyDataset
+
+    ds = Dataset.from_dict({"audio": files_to_process}).cast_column(
+        "audio", Audio(sampling_rate=16000)
+    )
+    import torch
+    from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+    from pathlib import Path
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    torch_dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+    model_id = "openai/whisper-large-v3"
+    try:
+        model = AutoModelForSpeechSeq2Seq.from_pretrained(
+            model_id,
+            torch_dtype=torch_dtype,
+            low_cpu_mem_usage=True,
+            use_safetensors=True,
+        )
+    except:
+        model = AutoModelForSpeechSeq2Seq.from_pretrained(
+            model_id,
+            torch_dtype=torch_dtype,
+            low_cpu_mem_usage=True,
+            use_safetensors=False,
+        )
+    model.to(device)
+    processor = AutoProcessor.from_pretrained(model_id)
+    pipe = pipeline(
+        "automatic-speech-recognition",
+        model=model,
+        tokenizer=processor.tokenizer,
+        feature_extractor=processor.feature_extractor,
+        max_new_tokens=128,
+        chunk_length_s=30,
+        batch_size=16,
+        return_timestamps=True,
+        torch_dtype=torch_dtype,
+        device=device,
+    )
+
+    result = pipe(
+        KeyDataset(ds, "audio"),
+        generate_kwargs={"language": "croatian"},
+    )
+    transcripts = [i.get("text") for i in result]
+    return transcripts
+
+
+def process_nemo(files_to_process: list[str | Path]) -> list[str]:
+    import nemo.collections.asr as nemo_asr
+
+    asr_model = nemo_asr.models.EncDecRNNTBPEModel.from_pretrained(
+        "nvidia/stt_hr_conformer_transducer_large"
+    )
+    result = asr_model.transcribe(files_to_process)
+    return result[0]
