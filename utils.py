@@ -13,7 +13,7 @@ def read_rttm(path: Path) -> pd.DataFrame:
     Returns:
         pd.DataFrame: dataframe with columns ["start", "end", "speaker_name"]. Start and end cols
         are floats. End is calculated from start and duration.
-    """    
+    """
     df = pd.read_csv(
         path,
         sep=" ",
@@ -45,7 +45,7 @@ def read_json(path: Path) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: dataframe with columns ["start", "end", "text"].
-    """    
+    """
     import json
 
     d = json.loads(path.read_text())
@@ -55,7 +55,9 @@ def read_json(path: Path) -> pd.DataFrame:
     return df[["start", "end", "text"]]
 
 
-def process_whisper(files_to_process: list[str | Path]) -> list[str]:
+def process_whisper(
+    files_to_process: list[str | Path], lang: str = "croatian"
+) -> list[str]:
     from datasets import Dataset, Audio
     from transformers.pipelines.pt_utils import KeyDataset
 
@@ -100,7 +102,7 @@ def process_whisper(files_to_process: list[str | Path]) -> list[str]:
 
     result = pipe(
         KeyDataset(ds, "audio"),
-        generate_kwargs={"language": "croatian"},
+        generate_kwargs={"language": lang},
     )
     transcripts = [i.get("text") for i in result]
     return transcripts
