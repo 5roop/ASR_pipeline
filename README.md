@@ -6,70 +6,60 @@ Maintainable ASR pipeline
 
 ASR_pipeline/
 - data
-    - audio_input <- place your audio files here
-    - audio_16khz_mono_wav
+    - audio_input <- input audio
+    - audio_16khz_mono_wav <- properly formatted wav files
     - asr
-    - vad
     - diarization
-## On downloading mixcloud files
+    - exbs
 
-Since there is no option to download audio directly from mixcloud, I used [this website](https://mixes.cloud/soundcloud-downloader/). Insert the mixcloud url in the form and click the `Download from Mixcloud` button. After some processing, a red button labelled `Download mix` pops up. You can copy its url, and then use wget to download it anywhere:
+This can be done by running
 
 ```bash
-cd data/audio_input
-wget https://stream11.mixcloud.com/secure/c/m4a/64/c/1/9/d/ad78-7373-4960-88ee-acccf3761515.m4a?sig=_2TbrScVf1qA5HXBnF7emA
-cd ../..
+mkdir data; cd data; mkdir audio_input audio_16khz_mono_wav asr diarization exbs; cd ..
 ```
 
-It's likely the audio won't stay available at this link forever, so this is not a permanent solution and only good for a few files. Potentially it could be automated at some point.
+## Audio preprocessing
 
-## Converting audio to wav
+Audio files should be aptly named, in wav format, sampled at 16kHz, with one channel only. To achieve this, one can use 
+```bash
+ffmpeg -i infile -ac 1 -ar 16000 -acodec pcm_s16le outfile.wav
+```
+to convert infile in appropriately formatted outfile. 
 
-A [script](01_convert_audio_to_16khz_mono_wav.sh) was written to convert the audio in a repeatable fashion. It also reorders the data sequentially, meaning that if another file is added and the script is rerun, the naming might change.
+For convenience this can be done also with `bash convert_audio.sh` script to transform all entries in `data/audio_input`, sequentially rename them (to 0.wav, 1.wav, ...) and save them to `data/audio_16khz_mono_wav`. 
 
-## VAD
 
-Pyannote will be used as it seems to be the biggest player on HF. It requires entering some info in the model card forms, but grants access immediately.
+## Sorting out HF credentials
+
 Write your HF token from `hf.co/settings/tokens` in `ASR_pipeline/secrets.json` as:
 ```json
 {
     "hf_token": "your token"
 }
 ```
-
-And request access on `hf.co/pyannote/segmentation`. Note you might have to register on multiple models to get stuff to work, but the error messages will lead you through it.
-
-This is quite fast, for my exemplary file I needed about 50s for a 50min file.
-
-I tested it out using [this notebook](02_vad_testing.ipynb).
+When running the code for the first time, you will be prompted to go to a HF modelcard and request access. Follow the URLs in the error messages and request access, it should be granted immediately. 
 
 ## Diarization
 
-Again I went with pyannote. Again it would not work without signing up for some more models, but the error messages lead me through it.
+Diarization is performed with pyannote and is the basis for segmentation as well. RTTM format is used as an industry standard for this.
 
-This part, investigated in [this notebook](02_diarization_testing.ipynb) was pretty slow. For 50 minutes of audio I needed 35 minutes of CPU time. It can be run on GPU, but I did not manage to due to some obscure nvidia errors that would require Damjan install new drivers. Perhaps with a careful downgrade of torch and pyannote this could be overcome.
+A script has been prepared to diarize all of the audios in `data/audio_16khz_mono_wav` iteratively, with only a single loading of the pipeline. It can be run as:
+```bash
+export CUDA_VISIBLE_DEVICES=0 # Select GPU core
+python diarize.py
+```
 
-2023-12-15T09:23:52: While working on Južne vesti I found a configuration that works. I'll add it to this repo.
+With this script for every wav file in `data/audio_16khz_mono_wav` a new file with the same name will be created in `data/diarization`.
 
-2023-12-15T09:38:01: Wooo diarization with GPU only takes 46 seconds!
+## Segmentation and ASR
 
-## ASR before segmenting
+The script `chunk_and_transcribe.py` segments the files, saves them on disk, transcribes them, and finally cleans up the segmented wavs. Right now whisper is used to transcribe the files and the language can be set in the code.
 
-To investigate the potential usability of non-vad segmentation, I pass the whole file through the pipeline.
+```bash
+export CUDA_VISIBLE_DEVICES=0 # Select GPU core
+python chunk_and_transcribe.py
+```
 
-In addition, nvidia Nemo models are now being tested, soon to be included beside whisper, إِنْ شَاءَ ٱللَّٰهُ
+## Compiling EXB
 
-
-# Further steps:
-
-We shall take diarization output as the basis for further segmentation. Segments with < 0.1s duration shall not be transcribed, but they should stay in there to be obvious that something is happening there. A new framework to handle it will have to be devised.
-
-
-# Status report as of 2023-12-20T11:56:02
-
-NeMo transcriber was implemented. For some reason transformers update was necessary, but it worked. The implementation could be better, right now transcriptions from two models are produced together and written in a single file. Perhaps this will be fixed in future iterations so that parallelization or snakemakization will be easier.
-
-
-### Bookkeeping:
-
-Export environment to yaml file: `mamba env export > environment.yaml`
+For inspection and manual downstream tasks an EXB is produced for every input wav. This is done with `python generate_exbs.py` for all available files, and the results are saved to `data/exbs`.
