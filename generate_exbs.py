@@ -24,6 +24,17 @@ for file in files:
     diarization_df = pd.read_csv(diarization_path)
 
     def add_df_to_template(exb: ET.Element, df: pd.DataFrame) -> ET.Element:
+        """Adds the transcription data from df to the template.
+
+        Right now, only inclusion of one transcription is enabled.
+
+        Args:
+            exb (ET.Element): parsed EXB template
+            df (pd.DataFrame): dataframe with columns start, end, speaker_name, duration, whisper
+
+        Returns:
+            ET.Element: template with transcription tiers.
+        """
         df2 = df[["start", "end", "speaker_name", "duration", "whisper"]].copy()
         df2["speaker_name"] = df.speaker_name.apply(lambda s: s + "_whisper")
         df2 = df2.rename(columns={"whisper": "text"})
