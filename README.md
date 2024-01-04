@@ -64,3 +64,20 @@ python chunk_and_transcribe.py
 ## Compiling EXB
 
 For inspection and manual downstream tasks an EXB is produced for every input wav. This is done with `python generate_exbs.py` for all available files, and the results are saved to `data/exbs`.
+
+# TL;DR:
+
+Run:
+```bash
+pip install -r requirements.txt
+mkdir data; cd data; mkdir audio_input audio_16khz_mono_wav asr diarization exbs; cd ..
+```
+Place your audio files in `audio_input`. Write your HF token to `secrets.json`. Run
+```bash
+bash convert_audio.sh
+export CUDA_VISIBLE_DEVICES=0 # Select GPU core
+python diarize.py
+export ASR_LANGUAGE=croatian
+python chunk_and_transcribe.py
+python generate_exbs.py
+```
