@@ -1,5 +1,9 @@
 # Data
-data
+data/audio_input/*
+data/audio_16khz_mono_wav/*
+data/asr/*
+data/diarization/*
+data/exbs/*
 secrets.json
 
 # Byte-compiled / optimized / DLL files
