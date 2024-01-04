@@ -1,5 +1,7 @@
 # ASR_pipeline
-Maintainable ASR pipeline
+Maintainable ASR pipeline for batch processing audio files.
+
+Performs diarization and ASR. End results are formatted as EXB (Exmaralda) files.
 
 ### Setting up python environment
 
@@ -33,9 +35,9 @@ Audio files should be aptly named, in wav format, sampled at 16kHz, with one cha
 ```bash
 ffmpeg -i infile -ac 1 -ar 16000 -acodec pcm_s16le outfile.wav
 ```
-to convert infile in appropriately formatted outfile. 
+to convert individual `infile` in appropriately formatted `outfile` with a reasonable filename you have to set yourself. 
 
-For convenience this can be done also with `bash convert_audio.sh` script to transform all entries in `data/audio_input`, sequentially rename them (to 0.wav, 1.wav, ...) and save them to `data/audio_16khz_mono_wav`. 
+For convenience this can be done also with `bash convert_audio.sh` script to transform all entries in `data/audio_input`, sequentially rename them (to 0.wav, 1.wav, ...) and save them to `data/audio_16khz_mono_wav`. Keep in mind, though, that the original file names will not be preserved.
 
 
 ## Sorting out HF credentials
@@ -60,15 +62,21 @@ python diarize.py
 
 With this script for every wav file in `data/audio_16khz_mono_wav` a new file with the same name will be created in `data/diarization`.
 
+Right now no restrictions are imposed on the maximal and minimal number of speakers allowed in the recoding, meaning that sometimes music/soundbites/laughter can be diarized as a separate speaker.
+
+This step is about 100x faster if GPU is available, so while not neccessary, it is reccommended to use one. In case no GPU is to be used, the `export CUDA_VISIBLE_DEVICES` statement is moot and can be omitted.
+
 ## Segmentation and ASR
 
-The script `chunk_and_transcribe.py` segments the files, saves them on disk, transcribes them, and finally cleans up the segmented wavs. Right now whisper is used to transcribe the files and the language can be set in the code.
+The script `chunk_and_transcribe.py` segments the audio files, saves them on disk, transcribes them, and finally cleans up the segmented wavs. Right now whisper is used to transcribe the files and the language can be set in the code.
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0 # Select GPU core
-export ASR_LANGUAGE=croatian # Language to use for ASR.
+export ASR_LANGUAGE=croatian # Language to use for ASR, passed to Whisper internally.
 python chunk_and_transcribe.py
 ```
+
+This step was not benchmarked on CPU, but it is thought to be about 100x faster if GPU is available, so while not neccessary, it is reccommended to use one. In case no GPU is to be used, the `export CUDA_VISIBLE_DEVICES` statement is moot and can be omitted.
 
 ## Compiling EXB
 
