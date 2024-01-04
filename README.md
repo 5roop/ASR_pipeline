@@ -28,6 +28,11 @@ ASR_pipeline
     └── exbs
 ```
 
+The expected file structure can be generated with
+
+```bash
+mkdir data; cd data; mkdir audio_input audio_16khz_mono_wav asr diarization exbs; cd ..
+```
 
 ## Audio preprocessing
 
