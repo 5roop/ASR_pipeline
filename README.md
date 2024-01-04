@@ -1,18 +1,32 @@
 # ASR_pipeline
 Maintainable ASR pipeline
 
+### Setting up python environment
+
+* Using `conda`: use the provided `environment.yml` file:
+```bash
+conda env create -f environment.yml
+conda activate asr
+```
+
+* Using pip from a new python 3.11.6 environment:
+```python
+pip install -r requirements.txt
+```
 
 ## Directory structure
 
-ASR_pipeline/
-- data
-    - audio_input <- input audio
-    - audio_16khz_mono_wav <- properly formatted wav files
-    - asr
-    - diarization
-    - exbs
+```
+ASR_pipeline
+└── data
+    ├── audio_input <- input audio
+    ├── audio_16khz_mono_wav <- properly formatted wav files
+    ├── asr
+    ├── diarization
+    └── exbs
+```
 
-This can be done by running
+The expected file structure can be generated with
 
 ```bash
 mkdir data; cd data; mkdir audio_input audio_16khz_mono_wav asr diarization exbs; cd ..

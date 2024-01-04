@@ -1,4 +1,4 @@
-name: base
+name: asr
 channels:
   - pytorch
   - nvidia
