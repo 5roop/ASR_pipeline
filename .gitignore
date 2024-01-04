@@ -1,11 +1,7 @@
 # Data
-data/*/*.*
+data
 secrets.json
-!data/asr
-!data/audio_16khz_mono_wav
-!data/audio_input
-!data/diarization
-!data/exbs
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
