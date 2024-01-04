@@ -57,6 +57,7 @@ The script `chunk_and_transcribe.py` segments the files, saves them on disk, tra
 
 ```bash
 export CUDA_VISIBLE_DEVICES=0 # Select GPU core
+export ASR_LANGUAGE=croatian # Language to use for ASR.
 python chunk_and_transcribe.py
 ```
 

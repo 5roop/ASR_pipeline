@@ -2,8 +2,10 @@ from pathlib import Path
 
 from pydub import AudioSegment
 
-from utils import process_nemo, process_whisper, read_rttm
+from utils import process_whisper, read_rttm
+from os import environ
 
+ASR_LANGUAGE = environ.get("ASR_LANGUAGE", "croatian")
 
 files = [
     file.with_suffix("").name
@@ -30,7 +32,7 @@ for file in files:
     diarization_df["path"] = filenames
 
     files = diarization_df.path.tolist()
-    diarization_df["whisper"] = process_whisper(files, lang="slovenian")
+    diarization_df["whisper"] = process_whisper(files, lang=ASR_LANGUAGE)
     for i in tempdir.glob("*.wav"):
         i.unlink()
     tempdir.rmdir()
