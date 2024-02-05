@@ -97,9 +97,9 @@ mkdir data; cd data; mkdir audio_input audio_16khz_mono_wav asr diarization exbs
 Place your audio files in `audio_input`. Write your HF token to `secrets.json`. Run
 ```bash
 bash convert_audio.sh
-export CUDA_VISIBLE_DEVICES=0 # Select GPU core
+export CUDA_VISIBLE_DEVICES=6 # Select GPU core
 python diarize.py
-export ASR_LANGUAGE=croatian
+export ASR_LANGUAGE=slovenian
 python chunk_and_transcribe.py
 python generate_exbs.py
 ```
