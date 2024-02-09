@@ -32,8 +32,14 @@ for file in files:
     diarization_df["path"] = filenames
 
     files = diarization_df.path.tolist()
+    from utils import process_seamless
+
+    diarization_df["seamless"] = process_seamless(
+        files,
+        # lang=ASR_LANGUAGE
+    )
     diarization_df["whisper"] = process_whisper(files, lang=ASR_LANGUAGE)
     for i in tempdir.glob("*.wav"):
         i.unlink()
     tempdir.rmdir()
-    diarization_df.to_csv(f"data/asr/{file}_diarization_whisper.csv", index=False)
+    diarization_df.to_csv(f"data/asr/{file}.csv", index=False)

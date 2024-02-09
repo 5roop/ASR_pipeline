@@ -116,3 +116,35 @@ def process_nemo(files_to_process: list[str | Path]) -> list[str]:
     )
     result = asr_model.transcribe(files_to_process)
     return result[0]
+
+
+def process_seamless(files_to_process: list[str | Path]) -> list[str]:
+    from transformers import AutoProcessor, SeamlessM4Tv2ForSpeechToText
+    import torchaudio
+
+    processor = AutoProcessor.from_pretrained("facebook/seamless-m4t-v2-large")
+    model = SeamlessM4Tv2ForSpeechToText.from_pretrained(
+        "facebook/seamless-m4t-v2-large"
+    )
+    transcriptions = []
+    for file in files_to_process:
+        audio, orig_freq = torchaudio.load(file)
+        audio = torchaudio.functional.resample(
+            audio, orig_freq=orig_freq, new_freq=16_000
+        )  # must be a 16 kHz waveform array
+        audio_inputs = processor(
+            audios=audio,
+            return_tensors="pt",
+        )
+        output = model.generate(
+            **audio_inputs,
+            # generate_speech=False,
+            tgt_lang="slv",
+            # return_intermediate_token_ids=True
+        )
+        transcriptions.append(
+            processor.tokenizer.batch_decode(output)[0]
+            .replace("</s>", "")
+            .replace("__slv__", "")
+        )
+    return transcriptions

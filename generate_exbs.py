@@ -16,7 +16,7 @@ files = [
 ]
 for file in files:
     audio_path = Path(f"data/audio_16khz_mono_wav/{file}.wav")
-    diarization_path = Path(f"data/asr/{file}_diarization_whisper.csv")
+    diarization_path = Path(f"data/asr/{file}.csv")
     template_path = Path("exb_template.xml")
     out_path = Path(f"data/exbs/{file}.exb")
 
