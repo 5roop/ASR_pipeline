@@ -99,7 +99,7 @@ Place your audio files in `audio_input`. Write your HF token to `secrets.json`. 
 bash convert_audio.sh
 export CUDA_VISIBLE_DEVICES=6 # Select GPU core
 python diarize.py
-export ASR_LANGUAGE=slovenian
+export ASR_LANGUAGE=croatian
 python chunk_and_transcribe.py
 python generate_exbs.py
 ```
